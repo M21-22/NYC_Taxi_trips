@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pii-utils"
+version = "0.1.0"
+description = "Spark utilities for encrypting and decrypting PII columns"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+py-modules = ["pii_utils"]
