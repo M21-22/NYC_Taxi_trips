@@ -218,8 +218,6 @@ Silver
 Gold
 ```
 
-**Recording:** [January initial ingestion](docs/records/january_10s.mp4)
-
 ---
 
 ## Incremental Load — February and March
@@ -241,10 +239,6 @@ New February / March files
         ▼
 Bronze → Silver → Gold
 ```
-
-**Recording:** [February–March incremental ingestion](docs/records/feb_march_15s.mp4)
-
-This demonstrates incremental file ingestion and propagation of new data through the complete Medallion pipeline.
 
 ---
 
@@ -351,8 +345,8 @@ NYC_Taxi_trips/
 │   │   └── performance_bottom_2.png
 │   │
 │   └── records/
-│       ├── january_10s.mp4
-│       └── feb_march_15s.mp4
+│       ├── january_10s.gif
+│       └── feb_march_15s.gif
 │
 ├── notebooks/
 │   ├── 00_metadata.ipynb
@@ -897,11 +891,7 @@ January source files
        Gold
 ```
 
-Verify the resulting tables and dashboard.
-
-The recorded example is available here:
-
-[January initial ingestion](docs/records/january_10s.mp4)
+[January initial ingestion](docs/records/january_10s.gif)
 
 ---
 
@@ -937,9 +927,7 @@ February ─┐
 March ────┘
 ```
 
-The recorded incremental execution is available here:
-
-[February–March incremental ingestion](docs/records/feb_march_15s.mp4)
+[February–March incremental ingestion](docs/records/feb_march_15s.gif)
 
 ---
 
