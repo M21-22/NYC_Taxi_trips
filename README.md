@@ -264,38 +264,6 @@ The exported Lakeview dashboard definition is stored in:
 dashboards/NYC Taxi — Demand and Revenue.lvdash.json
 ```
 
-## January
-
-### Overview
-
-![January overview — top](docs/dashboard/overview_top_1.png)
-
-![January overview — bottom](docs/dashboard/overview_bottom_1.png)
-
-### Performance
-
-![January performance — top](docs/dashboard/performance_top_1.png)
-
-![January performance — bottom](docs/dashboard/performance_bottom_1.png)
-
----
-
-## January–March
-
-After February and March are incrementally ingested, the same dashboard reflects all three months of data.
-
-### Overview
-
-![January-March overview — top](docs/dashboard/overview_top_2.png)
-
-![January-March overview — bottom](docs/dashboard/overview_bottom_2.png)
-
-### Performance
-
-![January-March performance — top](docs/dashboard/performance_top_2.png)
-
-![January-March performance — bottom](docs/dashboard/performance_bottom_2.png)
-
 ---
 
 # Infrastructure
@@ -876,19 +844,7 @@ Run the Lakeflow pipeline.
 The processing flow is:
 
 ```text
-January source files
-        │
-        ▼
-    Auto Loader
-        │
-        ▼
-      Bronze
-        │
-        ▼
-      Silver
-        │
-        ▼
-       Gold
+January source files ─► Auto Loader ─► Bronze ─► Silver ─► Gold
 ```
 
 ![January initial ingestion](docs/records/january_10s.gif)
@@ -933,19 +889,33 @@ March ────┘
 
 ## 19. Verify the Dashboard
 
-After the second pipeline run, refresh the Lakeview dashboard.
+### January
 
-The Gold data should now represent all three months:
+#### Overview
 
-```text
-January
-+
-February
-+
-March
-```
+![January overview — top](docs/dashboard/overview_top_1.png)
+![January overview — bottom](docs/dashboard/overview_bottom_1.png)
 
-The dashboard screenshots in `docs/dashboard/` demonstrate the difference between the January-only state and the final January–March state.
+#### Performance
+
+![January performance — top](docs/dashboard/performance_top_1.png)
+![January performance — bottom](docs/dashboard/performance_bottom_1.png)
+
+---
+
+### January–March
+
+After February and March are incrementally ingested, the same dashboard reflects all three months of data.
+
+#### Overview
+
+![January-March overview — top](docs/dashboard/overview_top_2.png)
+![January-March overview — bottom](docs/dashboard/overview_bottom_2.png)
+
+#### Performance
+
+![January-March performance — top](docs/dashboard/performance_top_2.png)
+![January-March performance — bottom](docs/dashboard/performance_bottom_2.png)
 
 ---
 
