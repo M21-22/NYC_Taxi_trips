@@ -891,7 +891,7 @@ January source files
        Gold
 ```
 
-[January initial ingestion](docs/records/january_10s.gif)
+![January initial ingestion](docs/records/january_10s.gif)
 
 ---
 
@@ -927,7 +927,7 @@ February ─┐
 March ────┘
 ```
 
-[February–March incremental ingestion](docs/records/feb_march_15s.gif)
+![February–March incremental ingestion](docs/records/feb_march_15s.gif)
 
 ---
 
