@@ -68,957 +68,6 @@
   ],
   "pages": [
     {
-      "name": "1bfdf084",
-      "displayName": "Route performance",
-      "layout": [
-        {
-          "widget": {
-            "name": "e933130b",
-            "queries": [
-              {
-                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_trip_date",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "trip_date",
-                      "expression": "`trip_date`"
-                    },
-                    {
-                      "name": "trip_date_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "selection": {
-                "defaultSelection": {
-                  "operator": {
-                    "operator": "AND",
-                    "args": []
-                  }
-                }
-              },
-              "frame": {
-                "showTitle": true,
-                "showDescription": false,
-                "title": "Trip date"
-              },
-              "widgetType": "filter-date-range-picker",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "trip_date",
-                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_trip_date"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 0,
-            "width": 3,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "add77455",
-            "queries": [
-              {
-                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_taxi_type",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "taxi_type_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "showTitle": true,
-                "title": "Taxi type"
-              },
-              "widgetType": "filter-single-select",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "taxi_type",
-                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_taxi_type"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 3,
-            "y": 0,
-            "width": 3,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "78177e65",
-            "queries": [
-              {
-                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_pickup_borough",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "pickup_borough",
-                      "expression": "`pickup_borough`"
-                    },
-                    {
-                      "name": "pickup_borough_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "showTitle": true,
-                "title": "Pickup borough"
-              },
-              "widgetType": "filter-single-select",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "pickup_borough",
-                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_pickup_borough"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 0,
-            "width": 3,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "daily-trip-demand",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "daily(trip_date)",
-                      "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
-                    },
-                    {
-                      "name": "sum(trip_count)",
-                      "expression": "SUM(`trip_count`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "<span style=\"text-align:center;display:block;\">Daily trip demand</span>",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "line",
-              "encodings": {
-                "x": {
-                  "fieldName": "daily(trip_date)",
-                  "displayName": "Trip date",
-                  "scale": {
-                    "type": "temporal"
-                  }
-                },
-                "y": {
-                  "fieldName": "sum(trip_count)",
-                  "displayName": "Total trips",
-                  "scale": {
-                    "type": "quantitative",
-                    "fn": {
-                      "type": "symlog"
-                    }
-                  }
-                },
-                "color": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical",
-                    "mappings": [
-                      {
-                        "value": "green",
-                        "color": {
-                          "themeColorType": "visualizationColors",
-                          "position": 3
-                        }
-                      }
-                    ]
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 1,
-            "width": 6,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "daily-revenue",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "daily(trip_date)",
-                      "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
-                    },
-                    {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Daily revenue",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "line",
-              "encodings": {
-                "x": {
-                  "fieldName": "daily(trip_date)",
-                  "displayName": "Trip date",
-                  "scale": {
-                    "type": "temporal"
-                  }
-                },
-                "y": {
-                  "fieldName": "sum(total_revenue)",
-                  "displayName": "Total daily revenue",
-                  "scale": {
-                    "type": "quantitative",
-                    "fn": {
-                      "type": "symlog"
-                    }
-                  }
-                },
-                "color": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical",
-                    "mappings": [
-                      {
-                        "value": "green",
-                        "color": {
-                          "themeColorType": "visualizationColors",
-                          "position": 3
-                        }
-                      }
-                    ]
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 1,
-            "width": 6,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "pickup-zone-demand",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "sum(trip_count)",
-                      "expression": "SUM(`trip_count`)"
-                    },
-                    {
-                      "name": "pickup_zone",
-                      "expression": "`pickup_zone`"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Pickup-zone demand",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "sum(trip_count)",
-                  "displayName": "Total trips",
-                  "scale": {
-                    "type": "quantitative"
-                  }
-                },
-                "y": {
-                  "fieldName": "pickup_zone",
-                  "displayName": "Pickup zone",
-                  "scale": {
-                    "type": "categorical"
-                  }
-                },
-                "label": {
-                  "show": false
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 7,
-            "width": 6,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "cash-and-credit-card-tips",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "sum(cash_trip_count)",
-                      "expression": "SUM(`cash_trip_count`)"
-                    },
-                    {
-                      "name": "sum(credit_card_trip_count)",
-                      "expression": "SUM(`credit_card_trip_count`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Cash and credit-card tips",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "taxi_type",
-                  "scale": {
-                    "type": "categorical"
-                  }
-                },
-                "y": {
-                  "scale": {
-                    "type": "quantitative"
-                  },
-                  "fields": [
-                    {
-                      "fieldName": "sum(cash_trip_count)"
-                    },
-                    {
-                      "fieldName": "sum(credit_card_trip_count)"
-                    }
-                  ]
-                },
-                "color": {
-                  "legend": {
-                    "position": "bottom",
-                    "title": ""
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 7,
-            "width": 6,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "filter_dropoff_borough",
-            "queries": [
-              {
-                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_dropoff_borough",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "dropoff_borough",
-                      "expression": "`dropoff_borough`"
-                    },
-                    {
-                      "name": "dropoff_borough_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "showTitle": true,
-                "title": "Dropoff borough"
-              },
-              "widgetType": "filter-single-select",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "dropoff_borough",
-                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_dropoff_borough"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 9,
-            "y": 0,
-            "width": 3,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "top_routes_by_trips",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "sum(trip_count)",
-                      "expression": "SUM(`trip_count`)"
-                    },
-                    {
-                      "name": "route",
-                      "expression": "`route`"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Routes by trips",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "sum(trip_count)",
-                  "format": {
-                    "type": "number-plain",
-                    "abbreviation": "none"
-                  },
-                  "displayName": "Trips",
-                  "scale": {
-                    "type": "quantitative"
-                  }
-                },
-                "y": {
-                  "fieldName": "route",
-                  "displayName": "Route",
-                  "scale": {
-                    "type": "categorical"
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 1,
-            "width": 12,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "route_detail_table",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "route",
-                      "expression": "`route`"
-                    },
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "sum(trip_count)",
-                      "expression": "SUM(`trip_count`)"
-                    },
-                    {
-                      "name": "measure(Revenue per trip)",
-                      "expression": "MEASURE(`Revenue per trip`)"
-                    },
-                    {
-                      "name": "measure(Approx. avg distance)",
-                      "expression": "MEASURE(`Approx. avg distance`)"
-                    },
-                    {
-                      "name": "measure(Approx. avg duration)",
-                      "expression": "MEASURE(`Approx. avg duration`)"
-                    },
-                    {
-                      "name": "measure(Revenue per mile)",
-                      "expression": "MEASURE(`Revenue per mile`)"
-                    },
-                    {
-                      "name": "measure(Recorded card tip rate)",
-                      "expression": "MEASURE(`Recorded card tip rate`)"
-                    }
-                  ],
-                  "disaggregated": false,
-                  "orders": [
-                    {
-                      "direction": "DESC",
-                      "expression": "SUM(`trip_count`)"
-                    }
-                  ]
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Route table",
-                  "fields": []
-                }
-              },
-              "version": 2,
-              "widgetType": "table",
-              "encodings": {
-                "columns": [
-                  {
-                    "fieldName": "route",
-                    "displayName": "Route"
-                  },
-                  {
-                    "fieldName": "taxi_type",
-                    "displayName": "Taxi type"
-                  },
-                  {
-                    "fieldName": "sum(trip_count)",
-                    "format": {
-                      "type": "number-plain",
-                      "abbreviation": "none"
-                    },
-                    "displayName": "Trips"
-                  },
-                  {
-                    "fieldName": "measure(Revenue per trip)",
-                    "format": {
-                      "type": "number-currency",
-                      "currencyCode": "USD",
-                      "abbreviation": "none",
-                      "decimalPlaces": {
-                        "type": "max",
-                        "places": 3
-                      }
-                    },
-                    "displayName": "Revenue per trip"
-                  },
-                  {
-                    "fieldName": "measure(Approx. avg distance)",
-                    "format": {
-                      "type": "number-plain",
-                      "abbreviation": "none",
-                      "decimalPlaces": {
-                        "type": "max",
-                        "places": 3
-                      }
-                    },
-                    "displayName": "Approx. avg distance",
-                    "formatTemplate": "{{ @formatted }} miles"
-                  },
-                  {
-                    "fieldName": "measure(Approx. avg duration)",
-                    "format": {
-                      "type": "number-plain",
-                      "abbreviation": "none",
-                      "decimalPlaces": {
-                        "type": "max",
-                        "places": 3
-                      }
-                    },
-                    "displayName": "Approx. avg duration",
-                    "formatTemplate": "{{ @formatted }} min"
-                  },
-                  {
-                    "fieldName": "measure(Revenue per mile)",
-                    "format": {
-                      "type": "number-currency",
-                      "currencyCode": "USD",
-                      "abbreviation": "none",
-                      "decimalPlaces": {
-                        "type": "max",
-                        "places": 3
-                      }
-                    },
-                    "displayName": "Revenue per mile",
-                    "formatTemplate": "{{ @formatted }} per mile"
-                  },
-                  {
-                    "fieldName": "measure(Recorded card tip rate)",
-                    "format": {
-                      "type": "number-percent",
-                      "decimalPlaces": {
-                        "type": "max",
-                        "places": 3
-                      }
-                    },
-                    "displayName": "Recorded card tip rate"
-                  }
-                ],
-                "rowOrder": [
-                  {
-                    "by": "column-reversed",
-                    "field": {
-                      "index": 2
-                    }
-                  }
-                ]
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 7,
-            "width": 12,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
-            "name": "approx_distance_by_taxi_type",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "measure(Approx. avg distance)",
-                      "expression": "MEASURE(`Approx. avg distance`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Approx. average distance by taxi type",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "mark": {
-                "colors": [
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 3
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 2
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 3
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 4
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 5
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 6
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 7
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 8
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 9
-                  },
-                  {
-                    "themeColorType": "visualizationColors",
-                    "position": 10
-                  }
-                ]
-              },
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical"
-                  }
-                },
-                "y": {
-                  "fieldName": "measure(Approx. avg distance)",
-                  "format": {
-                    "type": "number-plain",
-                    "abbreviation": "none",
-                    "decimalPlaces": {
-                      "type": "max",
-                      "places": 3
-                    }
-                  },
-                  "formatTemplate": "{{ @formatted }} miles",
-                  "displayName": "Approx. avg distance",
-                  "scale": {
-                    "type": "quantitative"
-                  }
-                },
-                "color": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical",
-                    "mappings": [
-                      {
-                        "value": "green",
-                        "color": "#10B981"
-                      },
-                      {
-                        "value": "yellow",
-                        "color": "#FACC15"
-                      }
-                    ]
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 13,
-            "width": 6,
-            "height": 5
-          }
-        },
-        {
-          "widget": {
-            "name": "approx_duration_by_taxi_type",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "9aa1b550",
-                  "fields": [
-                    {
-                      "name": "taxi_type",
-                      "expression": "`taxi_type`"
-                    },
-                    {
-                      "name": "measure(Approx. avg duration)",
-                      "expression": "MEASURE(`Approx. avg duration`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "frame": {
-                "showTitle": true,
-                "title": {
-                  "value": "Approx. average duration by taxi type",
-                  "fields": []
-                }
-              },
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical"
-                  }
-                },
-                "y": {
-                  "fieldName": "measure(Approx. avg duration)",
-                  "format": {
-                    "type": "number-plain",
-                    "abbreviation": "none",
-                    "decimalPlaces": {
-                      "type": "max",
-                      "places": 3
-                    }
-                  },
-                  "formatTemplate": "{{ @formatted }} min",
-                  "displayName": "Approx. avg duration",
-                  "scale": {
-                    "type": "quantitative"
-                  }
-                },
-                "color": {
-                  "fieldName": "taxi_type",
-                  "displayName": "Taxi type",
-                  "scale": {
-                    "type": "categorical",
-                    "mappings": [
-                      {
-                        "value": "green",
-                        "color": "#10B981"
-                      },
-                      {
-                        "value": "yellow",
-                        "color": "#FACC15"
-                      }
-                    ]
-                  }
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 13,
-            "width": 6,
-            "height": 5
-          }
-        }
-      ],
-      "pageType": "PAGE_TYPE_CANVAS",
-      "layoutVersion": "GRID_V1"
-    },
-    {
       "name": "10160934",
       "displayName": "Overview",
       "layout": [
@@ -1999,6 +1048,964 @@
             "y": 2,
             "width": 3,
             "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "1bfdf084",
+      "displayName": "Route performance",
+      "layout": [
+        {
+          "widget": {
+            "name": "e933130b",
+            "queries": [
+              {
+                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_trip_date",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "trip_date",
+                      "expression": "`trip_date`"
+                    },
+                    {
+                      "name": "trip_date_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "selection": {
+                "defaultSelection": {
+                  "operator": {
+                    "operator": "AND",
+                    "args": []
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": "Trip date"
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "trip_date",
+                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_trip_date"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "add77455",
+            "queries": [
+              {
+                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_taxi_type",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "taxi_type_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Taxi type"
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "taxi_type",
+                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_taxi_type"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "78177e65",
+            "queries": [
+              {
+                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_pickup_borough",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "pickup_borough",
+                      "expression": "`pickup_borough`"
+                    },
+                    {
+                      "name": "pickup_borough_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Pickup borough"
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "pickup_borough",
+                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_pickup_borough"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-trip-demand",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "daily(trip_date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
+                    },
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Daily trip demand</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(trip_date)",
+                  "displayName": "Trip date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(trip_count)",
+                  "displayName": "Total trips",
+                  "scale": {
+                    "type": "quantitative",
+                    "fn": {
+                      "type": "symlog"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "green",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "daily-revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "daily(trip_date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Daily revenue",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(trip_date)",
+                  "displayName": "Trip date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "Total daily revenue",
+                  "scale": {
+                    "type": "quantitative",
+                    "fn": {
+                      "type": "symlog"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "green",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "pickup-zone-demand",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    },
+                    {
+                      "name": "pickup_zone",
+                      "expression": "`pickup_zone`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Pickup-zone demand",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(trip_count)",
+                  "displayName": "Total trips",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "pickup_zone",
+                  "displayName": "Pickup zone",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cash-and-credit-card-tips",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "sum(cash_trip_count)",
+                      "expression": "SUM(`cash_trip_count`)"
+                    },
+                    {
+                      "name": "sum(credit_card_trip_count)",
+                      "expression": "SUM(`credit_card_trip_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Cash and credit-card tips",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "taxi_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(cash_trip_count)"
+                    },
+                    {
+                      "fieldName": "sum(credit_card_trip_count)"
+                    }
+                  ]
+                },
+                "color": {
+                  "legend": {
+                    "position": "bottom",
+                    "title": ""
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_dropoff_borough",
+            "queries": [
+              {
+                "name": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_dropoff_borough",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "dropoff_borough",
+                      "expression": "`dropoff_borough`"
+                    },
+                    {
+                      "name": "dropoff_borough_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Dropoff borough"
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "dropoff_borough",
+                    "queryName": "dashboards/01f1a93b1da71545b2d11e08eae78f0e/datasets/01f1a93b62b515dea440646d76ea1f49_dropoff_borough"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "top_routes_by_trips",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    },
+                    {
+                      "name": "route",
+                      "expression": "`route`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Top 10 routes by trips",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(trip_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Trips",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "route",
+                  "displayName": "Route",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "route_detail_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "route",
+                      "expression": "`route`"
+                    },
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    },
+                    {
+                      "name": "measure(Revenue per trip)",
+                      "expression": "MEASURE(`Revenue per trip`)"
+                    },
+                    {
+                      "name": "measure(Approx. avg distance)",
+                      "expression": "MEASURE(`Approx. avg distance`)"
+                    },
+                    {
+                      "name": "measure(Approx. avg duration)",
+                      "expression": "MEASURE(`Approx. avg duration`)"
+                    },
+                    {
+                      "name": "measure(Revenue per mile)",
+                      "expression": "MEASURE(`Revenue per mile`)"
+                    },
+                    {
+                      "name": "measure(Recorded card tip rate)",
+                      "expression": "MEASURE(`Recorded card tip rate`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "SUM(`trip_count`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Route table",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "route",
+                    "displayName": "Route"
+                  },
+                  {
+                    "fieldName": "taxi_type",
+                    "displayName": "Taxi type"
+                  },
+                  {
+                    "fieldName": "sum(trip_count)",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none"
+                    },
+                    "displayName": "Trips"
+                  },
+                  {
+                    "fieldName": "measure(Revenue per trip)",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "USD",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 3
+                      }
+                    },
+                    "displayName": "Revenue per trip"
+                  },
+                  {
+                    "fieldName": "measure(Approx. avg distance)",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 3
+                      }
+                    },
+                    "displayName": "Approx. avg distance",
+                    "formatTemplate": "{{ @formatted }} miles"
+                  },
+                  {
+                    "fieldName": "measure(Approx. avg duration)",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 3
+                      }
+                    },
+                    "displayName": "Approx. avg duration",
+                    "formatTemplate": "{{ @formatted }} min"
+                  },
+                  {
+                    "fieldName": "measure(Revenue per mile)",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "USD",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 3
+                      }
+                    },
+                    "displayName": "Revenue per mile",
+                    "formatTemplate": "{{ @formatted }} per mile"
+                  },
+                  {
+                    "fieldName": "measure(Recorded card tip rate)",
+                    "format": {
+                      "type": "number-percent",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 3
+                      }
+                    },
+                    "displayName": "Recorded card tip rate"
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column-reversed",
+                    "field": {
+                      "index": 2
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "approx_distance_by_taxi_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "measure(Approx. avg distance)",
+                      "expression": "MEASURE(`Approx. avg distance`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Approx. average distance by taxi type",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Approx. avg distance)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 3
+                    }
+                  },
+                  "formatTemplate": "{{ @formatted }} miles",
+                  "displayName": "Approx. avg distance",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "green",
+                        "color": "#10B981"
+                      },
+                      {
+                        "value": "yellow",
+                        "color": "#FACC15"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 13,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "approx_duration_by_taxi_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9aa1b550",
+                  "fields": [
+                    {
+                      "name": "taxi_type",
+                      "expression": "`taxi_type`"
+                    },
+                    {
+                      "name": "measure(Approx. avg duration)",
+                      "expression": "MEASURE(`Approx. avg duration`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Approx. average duration by taxi type",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Approx. avg duration)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 3
+                    }
+                  },
+                  "formatTemplate": "{{ @formatted }} min",
+                  "displayName": "Approx. avg duration",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "taxi_type",
+                  "displayName": "Taxi type",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "green",
+                        "color": "#10B981"
+                      },
+                      {
+                        "value": "yellow",
+                        "color": "#FACC15"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 13,
+            "width": 6,
+            "height": 5
           }
         }
       ],
