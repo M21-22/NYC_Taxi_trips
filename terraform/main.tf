@@ -88,7 +88,35 @@ resource "azurerm_databricks_workspace" "sdbdp" {
   }
 }
 
+resource "azurerm_databricks_access_connector" "sdbdp" {
+  name                = "ac-${var.ENV}-${var.LOCATION}-${random_string.suffix.result}"
+  resource_group_name = azurerm_resource_group.sdbdp.name
+  location            = azurerm_resource_group.sdbdp.location
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azurerm_role_assignment" "storage_blob_contributor" {
+  scope                = azurerm_storage_account.sdbdp.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_databricks_access_connector.sdbdp.identity[0].principal_id
+}
+
 output "resource_group_name" {
   description = "The name of the created Azure Resource Group."
   value       = azurerm_resource_group.sdbdp.name
+}
+
+output "storage_account_name" {
+  value = azurerm_storage_account.sdbdp.name
+}
+
+output "access_connector_id" {
+  value = azurerm_databricks_access_connector.sdbdp.id
+}
+
+output "databricks_workspace_url" {
+  value = azurerm_databricks_workspace.sdbdp.workspace_url
 }
