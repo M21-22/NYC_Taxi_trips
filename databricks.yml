@@ -1,0 +1,29 @@
+bundle:
+  name: nyc_taxi_trips
+
+artifacts:
+  pii_utils:
+    type: whl
+    path: .
+    build: python -m build --wheel
+
+resources:
+  pipelines:
+    nyc_taxi_medallion:
+      name: nyc_taxi_medallion_pipeline
+      catalog: dbw_dev_northeurope_bfn0
+      target: default
+      serverless: true
+      continuous: false
+
+      environment:
+        dependencies:
+          - dist/*.whl
+
+      libraries:
+        - notebook:
+            path: ./notebooks/01_bronze_layer.ipynb
+        - notebook:
+            path: ./notebooks/02_silver_layer.ipynb
+        - notebook:
+            path: ./notebooks/03_gold_layer.ipynb
