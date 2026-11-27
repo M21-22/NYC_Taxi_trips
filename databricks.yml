@@ -1,25 +1,78 @@
 bundle:
   name: nyc_taxi_trips
+  databricks_cli_version: ">= 0.287.0"
+
+variables:
+  catalog:
+    description: Unity Catalog catalog provisioned by Terraform.
+    default: nyc_taxi_dev
+  pipeline_principal:
+    description: Application ID of the pipeline service principal.
+  customer_job_principal:
+    description: Application ID of the dedicated customer encryption service principal.
+  analytics_group:
+    description: Account group allowed to view the dashboard.
+  warehouse_id:
+    description: ID of the existing dev SQL warehouse used by the dashboard.
+  notification_email:
+    description: Recipient of native pipeline failure notifications.
 
 artifacts:
-  pii_utils:
+  trip_transforms:
     type: whl
     path: .
-    build: python -m build --wheel
+    build: python -m build
+
+sync:
+  exclude:
+    - .env*
+    - "**/.env*"
+    - .venv/
+    - data/
+    - terraform/
 
 resources:
+  schemas:
+    bronze:
+      name: bronze
+      catalog_name: ${var.catalog}
+      grants:
+        - principal: ${var.pipeline_principal}
+          privileges: [USE_SCHEMA, CREATE_TABLE, CREATE_MATERIALIZED_VIEW]
+    silver:
+      name: silver
+      catalog_name: ${var.catalog}
+      grants:
+        - principal: ${var.pipeline_principal}
+          privileges: [USE_SCHEMA, CREATE_TABLE, CREATE_MATERIALIZED_VIEW]
+    gold:
+      name: gold
+      catalog_name: ${var.catalog}
+      grants:
+        - principal: ${var.pipeline_principal}
+          privileges: [USE_SCHEMA, CREATE_TABLE, CREATE_MATERIALIZED_VIEW]
+        - principal: ${var.analytics_group}
+          privileges: [USE_SCHEMA, SELECT]
+
   pipelines:
     nyc_taxi_medallion:
       name: nyc_taxi_medallion_pipeline
-      catalog: dbw_dev_northeurope_bfn0
-      target: default
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.gold.name}
       serverless: true
       continuous: false
-
+      run_as:
+        service_principal_name: ${var.pipeline_principal}
+      configuration:
+        nyc_taxi.trip_volume: /Volumes/${var.catalog}/landing/trips
+      notifications:
+        - alerts:
+            - on-update-failure
+          email_recipients:
+            - ${var.notification_email}
       environment:
         dependencies:
-          - dist/*.whl
-
+          - dist/nyc_taxi_transforms-0.2.4-py3-none-any.whl
       libraries:
         - notebook:
             path: ./notebooks/01_bronze_layer.ipynb
@@ -27,3 +80,52 @@ resources:
             path: ./notebooks/02_silver_layer.ipynb
         - notebook:
             path: ./notebooks/03_gold_layer.ipynb
+
+  jobs:
+    encrypt_customers:
+      name: nyc_taxi_encrypt_customers
+      max_concurrent_runs: 1
+      run_as:
+        service_principal_name: ${var.customer_job_principal}
+      parameters:
+        - name: pool_version
+          default: v1
+        - name: key_id
+          default: k1
+      environments:
+        - environment_key: customer_wheel
+          spec:
+            environment_version: "4"
+            dependencies:
+              - ./dist/nyc_taxi_transforms-0.2.4-py3-none-any.whl
+      tasks:
+        - task_key: encrypt_customer_pool
+          environment_key: customer_wheel
+          python_wheel_task:
+            package_name: nyc-taxi-transforms
+            entry_point: encrypt_customers
+            parameters:
+              - --catalog
+              - ${var.catalog}
+              - --pool-version
+              - "{{job.parameters.pool_version}}"
+              - --key-id
+              - "{{job.parameters.key_id}}"
+
+  dashboards:
+    taxi_metrics:
+      display_name: NYC Taxi — Demand and Revenue
+      file_path: ./dashboards/NYC Taxi — Demand and Revenue.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${resources.schemas.gold.name}
+      embed_credentials: false
+      permissions:
+        - group_name: ${var.analytics_group}
+          level: CAN_READ
+
+targets:
+  dev:
+    default: true
+    workspace:
+      root_path: /Workspace/nyc-taxi-bundles/${bundle.name}/${bundle.target}

@@ -7,36 +7,43 @@
         "SELECT\r\n",
         "    make_date(year, month, day) AS trip_date,\r\n",
         "    taxi_type,\r\n",
+        "    PULocationID AS pickup_zone_id,\r\n",
+        "    DOLocationID AS dropoff_zone_id,\r\n",
         "    coalesce(pickup_borough, 'Unknown') AS pickup_borough,\r\n",
-        "    coalesce(pickup_zone, 'Unknown') AS pickup_zone,\r\n",
+        "    concat(coalesce(pickup_zone, 'Unknown'), ' [', CAST(PULocationID AS STRING), ']') AS pickup_zone,\r\n",
         "    coalesce(dropoff_borough, 'Unknown') AS dropoff_borough,\r\n",
-        "    coalesce(dropoff_zone, 'Unknown') AS dropoff_zone,\r\n",
+        "    concat(coalesce(dropoff_zone, 'Unknown'), ' [', CAST(DOLocationID AS STRING), ']') AS dropoff_zone,\r\n",
         "    concat(\r\n",
-        "        coalesce(pickup_zone, 'Unknown'), ' → ',\r\n",
-        "        coalesce(dropoff_zone, 'Unknown')\r\n",
+        "        coalesce(pickup_zone, 'Unknown'), ' [', CAST(PULocationID AS STRING), '] → ',\r\n",
+        "        coalesce(dropoff_zone, 'Unknown'), ' [', CAST(DOLocationID AS STRING), ']'\r\n",
         "    ) AS route,\r\n",
         "    trip_count,\r\n",
-        "    total_revenue,\r\n",
+        "    total_passenger_charges,\r\n",
         "    total_tips,\r\n",
-        "    avg_trip_distance,\r\n",
-        "    avg_trip_duration_minutes,\r\n",
+        "    charge_trip_count,\r\n",
+        "    tip_trip_count,\r\n",
+        "    distance_trip_count,\r\n",
+        "    duration_trip_count,\r\n",
+        "    total_trip_duration_minutes,\r\n",
+        "    distance_charge_total,\r\n",
+        "    charge_distance,\r\n",
         "    total_trip_distance,\r\n",
         "    credit_card_trip_count,\r\n",
         "    cash_trip_count,\r\n",
         "    credit_card_fare_total,\r\n",
         "    credit_card_tip_total\r\n",
-        "FROM dbw_dev_northeurope_bfn0.default.daily_route_metrics"
+        "FROM daily_route_metrics"
       ],
       "columns": [
         {
-          "displayName": "Revenue per trip",
+          "displayName": "Charges per trip",
           "description": "",
-          "expression": "SUM(total_revenue) / NULLIF(SUM(trip_count), 0)"
+          "expression": "SUM(total_passenger_charges) / NULLIF(SUM(charge_trip_count), 0)"
         },
         {
           "displayName": "Tips per trip",
-          "description": "Average tips collected per trip",
-          "expression": "SUM(total_tips) / NULLIF(SUM(trip_count), 0)"
+          "description": "Average recorded tip for trips with a recorded tip amount",
+          "expression": "SUM(total_tips) / NULLIF(SUM(tip_trip_count), 0)"
         },
         {
           "displayName": "Card share",
@@ -44,24 +51,24 @@
           "expression": "SUM(credit_card_trip_count) * 1.0 / NULLIF(SUM(trip_count), 0)"
         },
         {
-          "displayName": "Approx. avg distance",
-          "description": "Trip-weighted approximation of average trip distance in miles",
-          "expression": "SUM(total_trip_distance) / NULLIF(SUM(trip_count), 0)"
+          "displayName": "Average distance",
+          "description": "Average miles for trips with a recorded distance",
+          "expression": "SUM(total_trip_distance) / NULLIF(SUM(distance_trip_count), 0)"
         },
         {
-          "displayName": "Approx. avg duration",
-          "description": "Trip-weighted approximation of average trip duration in minutes",
-          "expression": "SUM(CAST(avg_trip_duration_minutes AS DOUBLE) * trip_count) / NULLIF(SUM(trip_count), 0)"
+          "displayName": "Average duration",
+          "description": "Average minutes for trips with a recorded duration",
+          "expression": "SUM(total_trip_duration_minutes) / NULLIF(SUM(duration_trip_count), 0)"
         },
         {
-          "displayName": "Revenue per mile",
-          "description": "Revenue earned per mile traveled",
-          "expression": "SUM(total_revenue) / NULLIF(SUM(total_trip_distance), 0)"
+          "displayName": "Charges per mile",
+          "description": "Passenger charges per mile for trips with both values",
+          "expression": "SUM(distance_charge_total) / NULLIF(SUM(charge_distance), 0)"
         },
         {
           "displayName": "Recorded card tip rate",
-          "description": "Observed tip rate on card-paid fares",
-          "expression": "SUM(credit_card_tip_total) / NULLIF(SUM(credit_card_fare_total), 0)"
+          "description": "Recorded tips divided by fares on card trips with both values and a positive aggregate fare",
+          "expression": "CASE WHEN SUM(credit_card_fare_total) > 0 THEN SUM(credit_card_tip_total) / SUM(credit_card_fare_total) END"
         }
       ]
     }
@@ -280,7 +287,7 @@
         },
         {
           "widget": {
-            "name": "total_revenue",
+            "name": "total_passenger_charges",
             "queries": [
               {
                 "name": "main_query",
@@ -288,8 +295,8 @@
                   "datasetName": "9aa1b550",
                   "fields": [
                     {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
+                      "name": "sum(total_passenger_charges)",
+                      "expression": "SUM(`total_passenger_charges`)"
                     }
                   ],
                   "disaggregated": false
@@ -300,7 +307,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Revenue",
+                  "value": "Passenger charges",
                   "fields": []
                 }
               },
@@ -308,7 +315,7 @@
               "widgetType": "counter",
               "encodings": {
                 "value": {
-                  "fieldName": "sum(total_revenue)",
+                  "fieldName": "sum(total_passenger_charges)",
                   "rowNumber": 0,
                   "format": {
                     "type": "number-currency",
@@ -346,8 +353,8 @@
                   "datasetName": "9aa1b550",
                   "fields": [
                     {
-                      "name": "measure(Revenue per trip)",
-                      "expression": "MEASURE(`Revenue per trip`)"
+                      "name": "measure(Charges per trip)",
+                      "expression": "MEASURE(`Charges per trip`)"
                     }
                   ],
                   "disaggregated": false
@@ -358,7 +365,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Revenue per trip",
+                  "value": "Charges per trip",
                   "fields": []
                 }
               },
@@ -366,7 +373,7 @@
               "widgetType": "counter",
               "encodings": {
                 "value": {
-                  "fieldName": "measure(Revenue per trip)",
+                  "fieldName": "measure(Charges per trip)",
                   "rowNumber": 0,
                   "format": {
                     "type": "number-currency",
@@ -528,8 +535,8 @@
                       "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
                     },
                     {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
+                      "name": "sum(total_passenger_charges)",
+                      "expression": "SUM(`total_passenger_charges`)"
                     }
                   ],
                   "disaggregated": false
@@ -540,7 +547,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Daily revenue trend",
+                  "value": "Daily passenger charges trend",
                   "fields": []
                 }
               },
@@ -555,7 +562,7 @@
                   }
                 },
                 "y": {
-                  "fieldName": "sum(total_revenue)",
+                  "fieldName": "sum(total_passenger_charges)",
                   "format": {
                     "type": "number-currency",
                     "currencyCode": "USD",
@@ -565,7 +572,7 @@
                       "places": 3
                     }
                   },
-                  "displayName": "Revenue",
+                  "displayName": "Passenger charges",
                   "scale": {
                     "type": "quantitative"
                   }
@@ -699,8 +706,8 @@
                       "expression": "`dropoff_borough`"
                     },
                     {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
+                      "name": "sum(total_passenger_charges)",
+                      "expression": "SUM(`total_passenger_charges`)"
                     }
                   ],
                   "disaggregated": false
@@ -711,7 +718,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Revenue by dropoff borough",
+                  "value": "Passenger charges by dropoff borough",
                   "fields": []
                 }
               },
@@ -761,7 +768,7 @@
                   }
                 },
                 "y": {
-                  "fieldName": "sum(total_revenue)",
+                  "fieldName": "sum(total_passenger_charges)",
                   "format": {
                     "type": "number-currency",
                     "currencyCode": "USD",
@@ -771,7 +778,7 @@
                       "places": 3
                     }
                   },
-                  "displayName": "Revenue",
+                  "displayName": "Passenger charges",
                   "scale": {
                     "type": "quantitative",
                     "fn": {
@@ -870,12 +877,12 @@
                       "expression": "SUM(`trip_count`)"
                     },
                     {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
+                      "name": "sum(total_passenger_charges)",
+                      "expression": "SUM(`total_passenger_charges`)"
                     },
                     {
-                      "name": "measure(Revenue per trip)",
-                      "expression": "MEASURE(`Revenue per trip`)"
+                      "name": "measure(Charges per trip)",
+                      "expression": "MEASURE(`Charges per trip`)"
                     },
                     {
                       "name": "measure(Tips per trip)",
@@ -921,7 +928,7 @@
                     "displayName": "Trips"
                   },
                   {
-                    "fieldName": "sum(total_revenue)",
+                    "fieldName": "sum(total_passenger_charges)",
                     "format": {
                       "type": "number-currency",
                       "currencyCode": "USD",
@@ -931,10 +938,10 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Revenue"
+                    "displayName": "Passenger charges"
                   },
                   {
-                    "fieldName": "measure(Revenue per trip)",
+                    "fieldName": "measure(Charges per trip)",
                     "format": {
                       "type": "number-currency",
                       "currencyCode": "USD",
@@ -944,7 +951,7 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Revenue per trip"
+                    "displayName": "Charges per trip"
                   },
                   {
                     "fieldName": "measure(Tips per trip)",
@@ -1306,8 +1313,8 @@
                       "expression": "DATE_TRUNC(\"DAY\", `trip_date`)"
                     },
                     {
-                      "name": "sum(total_revenue)",
-                      "expression": "SUM(`total_revenue`)"
+                      "name": "sum(total_passenger_charges)",
+                      "expression": "SUM(`total_passenger_charges`)"
                     }
                   ],
                   "disaggregated": false
@@ -1318,7 +1325,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Daily revenue",
+                  "value": "Daily passenger charges",
                   "fields": []
                 }
               },
@@ -1333,8 +1340,8 @@
                   }
                 },
                 "y": {
-                  "fieldName": "sum(total_revenue)",
-                  "displayName": "Total daily revenue",
+                  "fieldName": "sum(total_passenger_charges)",
+                  "displayName": "Total daily passenger charges",
                   "scale": {
                     "type": "quantitative",
                     "fn": {
@@ -1648,20 +1655,20 @@
                       "expression": "SUM(`trip_count`)"
                     },
                     {
-                      "name": "measure(Revenue per trip)",
-                      "expression": "MEASURE(`Revenue per trip`)"
+                      "name": "measure(Charges per trip)",
+                      "expression": "MEASURE(`Charges per trip`)"
                     },
                     {
-                      "name": "measure(Approx. avg distance)",
-                      "expression": "MEASURE(`Approx. avg distance`)"
+                      "name": "measure(Average distance)",
+                      "expression": "MEASURE(`Average distance`)"
                     },
                     {
-                      "name": "measure(Approx. avg duration)",
-                      "expression": "MEASURE(`Approx. avg duration`)"
+                      "name": "measure(Average duration)",
+                      "expression": "MEASURE(`Average duration`)"
                     },
                     {
-                      "name": "measure(Revenue per mile)",
-                      "expression": "MEASURE(`Revenue per mile`)"
+                      "name": "measure(Charges per mile)",
+                      "expression": "MEASURE(`Charges per mile`)"
                     },
                     {
                       "name": "measure(Recorded card tip rate)",
@@ -1707,7 +1714,7 @@
                     "displayName": "Trips"
                   },
                   {
-                    "fieldName": "measure(Revenue per trip)",
+                    "fieldName": "measure(Charges per trip)",
                     "format": {
                       "type": "number-currency",
                       "currencyCode": "USD",
@@ -1717,10 +1724,10 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Revenue per trip"
+                    "displayName": "Charges per trip"
                   },
                   {
-                    "fieldName": "measure(Approx. avg distance)",
+                    "fieldName": "measure(Average distance)",
                     "format": {
                       "type": "number-plain",
                       "abbreviation": "none",
@@ -1729,11 +1736,11 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Approx. avg distance",
+                    "displayName": "Average distance",
                     "formatTemplate": "{{ @formatted }} miles"
                   },
                   {
-                    "fieldName": "measure(Approx. avg duration)",
+                    "fieldName": "measure(Average duration)",
                     "format": {
                       "type": "number-plain",
                       "abbreviation": "none",
@@ -1742,11 +1749,11 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Approx. avg duration",
+                    "displayName": "Average duration",
                     "formatTemplate": "{{ @formatted }} min"
                   },
                   {
-                    "fieldName": "measure(Revenue per mile)",
+                    "fieldName": "measure(Charges per mile)",
                     "format": {
                       "type": "number-currency",
                       "currencyCode": "USD",
@@ -1756,7 +1763,7 @@
                         "places": 3
                       }
                     },
-                    "displayName": "Revenue per mile",
+                    "displayName": "Charges per mile",
                     "formatTemplate": "{{ @formatted }} per mile"
                   },
                   {
@@ -1806,8 +1813,8 @@
                       "expression": "`taxi_type`"
                     },
                     {
-                      "name": "measure(Approx. avg distance)",
-                      "expression": "MEASURE(`Approx. avg distance`)"
+                      "name": "measure(Average distance)",
+                      "expression": "MEASURE(`Average distance`)"
                     }
                   ],
                   "disaggregated": false
@@ -1818,7 +1825,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Approx. average distance by taxi type",
+                  "value": "Average distance by taxi type",
                   "fields": []
                 }
               },
@@ -1877,7 +1884,7 @@
                   }
                 },
                 "y": {
-                  "fieldName": "measure(Approx. avg distance)",
+                  "fieldName": "measure(Average distance)",
                   "format": {
                     "type": "number-plain",
                     "abbreviation": "none",
@@ -1887,7 +1894,7 @@
                     }
                   },
                   "formatTemplate": "{{ @formatted }} miles",
-                  "displayName": "Approx. avg distance",
+                  "displayName": "Average distance",
                   "scale": {
                     "type": "quantitative"
                   }
@@ -1936,8 +1943,8 @@
                       "expression": "`taxi_type`"
                     },
                     {
-                      "name": "measure(Approx. avg duration)",
-                      "expression": "MEASURE(`Approx. avg duration`)"
+                      "name": "measure(Average duration)",
+                      "expression": "MEASURE(`Average duration`)"
                     }
                   ],
                   "disaggregated": false
@@ -1948,7 +1955,7 @@
               "frame": {
                 "showTitle": true,
                 "title": {
-                  "value": "Approx. average duration by taxi type",
+                  "value": "Average duration by taxi type",
                   "fields": []
                 }
               },
@@ -1963,7 +1970,7 @@
                   }
                 },
                 "y": {
-                  "fieldName": "measure(Approx. avg duration)",
+                  "fieldName": "measure(Average duration)",
                   "format": {
                     "type": "number-plain",
                     "abbreviation": "none",
@@ -1973,7 +1980,7 @@
                     }
                   },
                   "formatTemplate": "{{ @formatted }} min",
-                  "displayName": "Approx. avg duration",
+                  "displayName": "Average duration",
                   "scale": {
                     "type": "quantitative"
                   }
