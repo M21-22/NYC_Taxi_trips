@@ -82,6 +82,18 @@ resources:
             path: ./notebooks/03_gold_layer.ipynb
 
   jobs:
+    refresh_taxi_zones:
+      name: nyc_taxi_refresh_taxi_zones
+      max_concurrent_runs: 1
+      run_as:
+        service_principal_name: ${var.pipeline_principal}
+      tasks:
+        - task_key: refresh_taxi_zones
+          notebook_task:
+            notebook_path: ./notebooks/refresh_taxi_zones.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+
     encrypt_customers:
       name: nyc_taxi_encrypt_customers
       max_concurrent_runs: 1
