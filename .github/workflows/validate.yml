@@ -1,0 +1,55 @@
+name: Validate locally runnable checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Test Python and Spark
+        env:
+          SPARK_LOCAL_IP: 127.0.0.1
+        run: |
+          python -m pip install -r requirements.txt PyYAML==6.0.2 jsonschema==4.23.0
+          python -B -m pytest -q -p no:cacheprovider
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.12.2"
+          terraform_wrapper: false
+      - name: Validate Terraform without a backend
+        run: |
+          terraform fmt -recursive -check terraform
+          for root in terraform terraform/unity-catalog; do
+            terraform -chdir="$root" init -backend=false -input=false -lockfile=readonly
+            terraform -chdir="$root" validate
+          done
+      - uses: databricks/setup-cli@e1dad86b08f6ea07707aea128ec4bfa76af8db55
+        with:
+          version: "0.287.0"
+      - name: Check the Databricks bundle schema
+        run: |
+          databricks bundle schema > "$RUNNER_TEMP/bundle-schema.json"
+          python - "$RUNNER_TEMP/bundle-schema.json" <<'PY'
+          import json
+          import sys
+
+          import jsonschema
+          import yaml
+
+          with open(sys.argv[1], encoding="utf-8") as schema, open("databricks.yml", encoding="utf-8") as bundle:
+              jsonschema.validate(yaml.safe_load(bundle), json.load(schema))
+          PY
